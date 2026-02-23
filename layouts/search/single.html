@@ -1,0 +1,14 @@
+{{ define "main" }}
+<section class="search-page">
+  <h1 class="section-title">Recherche</h1>
+  <p class="section-desc">Tapez un mot-clé (poste, entreprise, ville) pour trouver une offre.</p>
+
+  <form class="search-form search-form-page" action="{{ "search/" | relURL }}" method="get" role="search">
+    <input type="search" name="q" id="search-input" placeholder="Ex: développeur Casablanca" aria-label="Recherche" value="{{ .Request.URL.Query.Get "q" }}">
+    <button type="submit" aria-label="Rechercher">🔍</button>
+  </form>
+
+  <div class="search-meta" id="search-meta" aria-live="polite"></div>
+  <div class="card-grid" id="search-results"></div>
+</section>
+{{ end }}

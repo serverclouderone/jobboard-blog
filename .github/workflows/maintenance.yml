@@ -1,0 +1,57 @@
+name: Maintenance (Nettoyage)
+
+on:
+  schedule:
+    # Dimanche 2h UTC (= 3h Maroc)
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Nettoyage logs anciens
+        run: |
+          find logs/ -name "*.log" -mtime +30 -delete || true
+          echo "Logs anciens supprimés"
+      
+      - name: Nettoyage images orphelines
+        run: |
+          python -c "
+          import os
+          import glob
+          root = '.'
+          published_slugs = set()
+          if os.path.exists('scripts/utils/published_slugs.txt'):
+              with open('scripts/utils/published_slugs.txt', 'r') as f:
+                  published_slugs = {line.strip() for line in f if line.strip()}
+          images = glob.glob('static/images/*-cover.jpg')
+          deleted = 0
+          for img in images:
+              slug = os.path.basename(img).replace('-cover.jpg', '')
+              if slug not in published_slugs:
+                  os.remove(img)
+                  deleted += 1
+          print(f'Images orphelines supprimées: {deleted}')
+          "
+        continue-on-error: true
+      
+      - name: Commit nettoyage
+        if: success()
+        run: |
+          git config user.name "BeJob Bot"
+          git config user.email "bot@bejob.ma"
+          git add static/images/
+          git diff --staged --quiet || (git commit -m "Auto: maintenance nettoyage [skip ci]" && git push)
+        continue-on-error: true

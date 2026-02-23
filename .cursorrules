@@ -1,0 +1,412 @@
+# ═══════════════════════════════════════════════════════════════════
+# .cursorrules — JOBBOARD BLOG MAROC (Version Définitive)
+# Concurrent analysé: bghit-nekhdem.com (13 sitemaps, ~6500 articles)
+# Objectif: Le dépasser sur tous les points en 90 jours
+# ═══════════════════════════════════════════════════════════════════
+
+## 🎯 IDENTITÉ ET POSITIONNEMENT
+
+- Nom du site: [TON-SITE].ma
+- Concept: Blog automatisé d'offres d'emploi au Maroc, généré par IA
+- Avantage concurrentiel N°1: Articles 1000 mots vs 400 mots (concurrent)
+- Avantage concurrentiel N°2: Schema JSON-LD JobPosting → Google Jobs (concurrent absent)
+- Avantage concurrentiel N°3: FAQ dans chaque article → Google People Also Ask
+- Avantage concurrentiel N°4: Automatisé 24h/7j vs rédaction humaine (concurrent)
+- Avantage concurrentiel N°5: Hugo statique ultra-rapide vs WordPress lent (concurrent)
+- Avantage concurrentiel N°6: Présence Telegram + WhatsApp (concurrent absent Telegram)
+- Langue: Français (principal), Arabe (titres + tags uniquement)
+- Marché: Maroc, Maghreb, Diaspora marocaine France/Canada
+
+
+## 🏗️ STACK TECHNIQUE (INTANGIBLE - NE JAMAIS DÉVIER)
+
+- Générateur: Hugo (statique, ultra-rapide, 0 coût serveur)
+- Hébergement: Netlify (gratuit, SSL auto, déploiement GitHub auto)
+- Versioning: GitHub
+- Automatisation: GitHub Actions (cron YAML)
+- Backend: Python 3.11 UNIQUEMENT
+- LLM principal: DeepSeek Chat (deepseek-chat) — rédaction articles
+- LLM analyse: DeepSeek Reasoner (deepseek-reasoner) — extraction structurée
+- Images: Pollinations AI (flux model, gratuit) + récupération images sources
+- Scraping: requests + BeautifulSoup4 (lxml) + re UNIQUEMENT
+- CSS: Vanilla CSS (zéro framework externe)
+- JS: Vanilla JavaScript minimal
+- Formulaires: Netlify Forms
+- Analytics: Google Analytics 4
+- Monétisation: Google AdSense (objectif approbation J+30)
+- Partage social: WhatsApp + Facebook + LinkedIn + Telegram (boutons natifs)
+- Google News: Sitemap news dédié (news-sitemap.xml via Hugo)
+
+
+## 📁 ARBORESCENCE STRICTE DU PROJET
+
+jobboard-blog/
+├── .cursorrules
+├── .env.example
+├── .gitignore
+├── config.toml
+├── requirements.txt
+├── README.md
+│
+├── .github/workflows/
+│   ├── pipeline_offres.yml         ← Cron 6h/14h/20h UTC (offres privées)
+│   ├── pipeline_public.yml         ← Cron 7h/15h UTC (emploi public + alwadifa)
+│   ├── pipeline_etranger.yml       ← Cron 9h UTC (France + Canada)
+│   ├── pipeline_editorial.yml      ← Cron 8h UTC (conseils RH + coaching)
+│   └── maintenance.yml             ← Cron dimanche 2h UTC (nettoyage)
+│
+├── scripts/
+│   ├── config.py                   ← SEULE source de vérité pour les constantes
+│   ├── main_pipeline.py            ← Orchestrateur principal
+│   │
+│   ├── scrapers/
+│   │   ├── __init__.py
+│   │   ├── base_scraper.py         ← Classe abstraite (session, headers, clean_text)
+│   │   ├── raw_scraper.py          ← Scraper HTML brut générique
+│   │   ├── scraper_bghit.py        ← Scraping bghit-nekhdem.com + images
+│   │   ├── scraper_rekrute.py      ← Rekrute.ma
+│   │   ├── scraper_emploima.py     ← Emploi.ma
+│   │   ├── scraper_indeed.py       ← Indeed.ma (JSON embarqué)
+│   │   ├── scraper_anapec.py       ← Anapec.org
+│   │   ├── scraper_alwadifa.py     ← Alwadifa.ma (emploi public + concours)
+│   │   ├── scraper_marocannonces.py← MarocAnnonces.com
+│   │   ├── scraper_optioncarriere.py
+│   │   ├── scraper_linkedin.py     ← LinkedIn public jobs (sans login)
+│   │   └── scraper_manager.py      ← Orchestre + déduplication + tri
+│   │
+│   ├── agents/
+│   │   ├── __init__.py
+│   │   └── agent_writer.py         ← Agent IA complet (3 appels DeepSeek)
+│   │
+│   ├── images/
+│   │   ├── __init__.py
+│   │   ├── image_generator.py      ← Pollinations (cover 1200x630)
+│   │   └── image_downloader.py     ← Téléchargement images depuis sources
+│   │
+│   ├── publisher/
+│   │   ├── __init__.py
+│   │   ├── hugo_publisher.py       ← Génère .md avec front matter complet
+│   │   └── cross_poster.py         ← Telegram + WhatsApp link generator
+│   │
+│   └── utils/
+│       ├── __init__.py
+│       ├── logger.py               ← Logger coloré console + fichier
+│       ├── deduplication.py        ← published_slugs.txt manager
+│       └── seo_scorer.py           ← Score SEO local (grille 13 critères)
+│
+├── content/
+│   ├── offres/                     ← Articles offres emploi privé
+│   ├── public/                     ← Emploi public + concours + alwadifa
+│   ├── etranger/                   ← Emploi France + Canada
+│   ├── stage/                      ← Stages + PFE
+│   ├── conseils/                   ← Articles coaching + conseils RH
+│   ├── concours/                   ← Résultats concours
+│   └── pages/
+│       ├── a-propos.md
+│       ├── contact.md
+│       ├── politique-de-confidentialite.md
+│       ├── conditions-utilisation.md
+│       ├── mentions-legales.md
+│       ├── publier-offre.md
+│       └── newsletter.md
+│
+├── static/
+│   ├── images/                     ← Images générées/téléchargées
+│   └── icons/                      ← Icônes SVG UI
+│
+├── layouts/
+│   ├── _default/
+│   │   ├── baseof.html
+│   │   ├── single.html             ← Template article avec structure bghit améliorée
+│   │   └── list.html               ← Grille avec filtres instantanés
+│   ├── partials/
+│   │   ├── head.html               ← Meta SEO + OG + Twitter + GA + AdSense + News
+│   │   ├── header.html             ← Navigation bghit-style (secteur/fonction/ville)
+│   │   ├── footer.html
+│   │   ├── adsense.html
+│   │   ├── seo-schema.html         ← Schema JSON-LD (JobPosting + Article + FAQ)
+│   │   ├── share-buttons.html      ← WhatsApp + Facebook + LinkedIn + Telegram
+│   │   └── newsletter-inline.html  ← Widget newsletter dans les articles
+│   └── shortcodes/
+│       ├── apply-button.html       ← Bouton CTA "Postuler"
+│       └── info-box.html           ← Encadré info (type/ville/salaire)
+│
+├── assets/
+│   ├── css/main.css
+│   └── js/main.js
+│
+└── data/
+    ├── editorial_topics.json       ← 50 sujets conseils RH
+    └── alwadifa_sources.json       ← URLs sources emploi public
+
+
+## 🕷️ SOURCES DE SCRAPING (PRIORITÉ 1 → 7)
+
+### PRIORITÉ 1 — bghit-nekhdem.com (Concurrent direct)
+URL listing: https://bghit-nekhdem.com/
+Catégories à scraper:
+  - /category/emploi-maroc/ (emploi privé)
+  - /category/emploi-public/ (emploi public)
+  - /category/alwadifa-maroc/ (concours publics)
+  - /category/emploi-etranger/retrouvez-sur-cette-page-tous-les-offres-en-france/
+  - /category/emploi-etranger/retrouvez-sur-cette-page-tous-les-offres-demploi-au-canada/
+  - /category/stage/ (stages)
+Technique: Extraire les URLs depuis leur sitemap XML ou leurs pages catégories
+Image: Extraire l'og:image de chaque article et la télécharger
+Délai: 4 secondes entre requêtes (respecter leur serveur)
+Note: Source de veille concurrentielle + inspiration contenu
+
+### PRIORITÉ 2 — alwadifa.ma / emploi-public.ma
+URL: https://alwadifa.ma/
+URL alt: https://www.alwadifa.ma/recrutement/
+Technique: BS4, structure blog WordPress, récupérer articles concours
+Délai: 3 secondes
+
+### PRIORITÉ 3 — rekrute.com
+URL: https://www.rekrute.com/offres.html?s=3&p={page}&o=1
+Technique: BS4, liste <li> avec posts
+Délai: 2 secondes
+
+### PRIORITÉ 4 — emploi.ma
+URL: https://www.emploi.ma/recherche-emploi-maroc/
+Technique: BS4, structure WordPress
+Délai: 2 secondes
+
+### PRIORITÉ 5 — indeed.ma
+URL: https://ma.indeed.com/jobs?q={keyword}&l=Maroc&fromage=2&sort=date
+Technique: re.findall JSON embarqué + fallback BS4
+Délai: 5 secondes
+
+### PRIORITÉ 6 — optioncarriere.ma
+URL: https://www.optioncarriere.ma/emploi.html?s=&l=Maroc
+Technique: BS4, cards <article class="job">
+Délai: 2 secondes
+
+### PRIORITÉ 7 — marocannonces.com
+URL: https://www.marocannonces.com/categorie-12.html (emplois)
+Technique: BS4, structure annonces classiques
+Délai: 3 secondes
+
+### PRIORITÉ 8 — LinkedIn (offres publiques sans login)
+URL: https://www.linkedin.com/jobs/search/?location=Maroc&f_TPR=r86400
+Technique: BS4 sur les résultats publics (sans authentification)
+Délai: 5 secondes (prudence anti-blocage)
+
+
+## 🤖 RÈGLES DEEPSEEK (2 MODÈLES)
+
+### deepseek-reasoner → APPEL 1 (Extraction structurée)
+Modèle: "deepseek-reasoner"
+Rôle: Analyser le texte brut et extraire les infos avec raisonnement
+Temperature: N/A (modèle de raisonnement)
+response_format: {"type": "json_object"}
+Usage: Extraction des champs (poste, entreprise, ville, type, compétences)
+
+### deepseek-chat → APPEL 2 (Rédaction article)
+Modèle: "deepseek-chat"
+Rôle: Rédiger l'article de blog complet 800-1000 mots
+Temperature: 0.75
+Usage: Génération du Markdown
+
+### deepseek-chat → APPEL 3 (Métadonnées SEO)
+Modèle: "deepseek-chat"
+Rôle: Générer title SEO + meta description + slug + keywords
+Temperature: 0.2
+response_format: {"type": "json_object"}
+
+### Client commun:
+from openai import OpenAI
+client = OpenAI(
+    api_key=os.environ.get("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com"
+)
+
+### Structure article obligatoire (inspiration bghit-nekhdem améliorée):
+## [Entreprise] Recrute : [X Postes] à [Ville] – [Année]     ← H2 accroche
+[Intro 150 mots: entreprise + opportunité + mot-clé SEO]
+## À propos de [Entreprise]                                    ← H2
+[150-200 mots: présentation entreprise, secteur, présence Maroc]
+## Postes à Pourvoir                                           ← H2
+### [Poste 1]                                                  ← H3
+- Missions principales (liste)
+- Profil recherché (liste)
+### [Poste 2]...
+## Conditions et Avantages                                     ← H2
+[Salaire, type contrat, avantages si disponibles]
+## Comment Postuler                                            ← H2
+[Instructions claires + bouton CTA]
+## FAQ – Questions Fréquentes                                  ← H2
+Q/R × 3
+{{< apply-button >}}                                           ← Shortcode
+
+
+## 📐 TAXONOMIE HUGO (Copier la structure bghit-nekhdem)
+
+Taxonomies dans config.toml:
+[taxonomies]
+  secteur = "secteurs"
+  fonction = "fonctions"
+  ville = "villes"
+  type = "types"
+  pays = "pays"
+
+Secteurs (8): automobile-aeronautique | banques-assurances | informatique-it |
+              industrie-btp | hotellerie-restauration | agroalimentaire |
+              medecine-sante | agriculture
+
+Fonctions (9): audit-controle | commercial | finance-comptabilite | ingenieurs |
+               juridique-droit | marketing | ressources-humaines |
+               logistique-supply-chain | techniciens
+
+Villes (8): grand-casablanca | rabat-sale-kenitra | tanger-tetouan |
+            marrakech-safi | fes-meknes | oriental | el-jadida | du-sud
+
+Types (6): cdi | cdd | stage-pfe | freelance | remote | concours-public
+
+Pays (3): maroc | france | canada
+
+
+## 📰 NAVIGATION HEADER (Exactement bghit-nekhdem + améliorations)
+
+Menu principal:
+1. ACCUEIL
+2. EMPLOI (dropdown: Par Secteur / Par Fonction / Par Ville)
+3. EMPLOI PUBLIC (concours + alwadifa)
+4. EMPLOI ÉTRANGER (dropdown: France / Canada)
+5. STAGE & PFE
+6. COACHING
+7. RÉSULTATS CONCOURS [NOUVEAU]
+8. 📢 PUBLIER UNE OFFRE (CTA orange)
+
+Barre de recherche rapide dans le header.
+Compteur "X offres aujourd'hui" visible dans le header.
+
+
+## 🎨 RÈGLES IMAGES
+
+### Stratégie 3 niveaux:
+Niveau 1 — Image depuis la source originale:
+  - Extraire og:image de la page source scrapeée
+  - Télécharger et sauvegarder dans static/images/{slug}-cover.jpg
+  - Utiliser CETTE image en priorité (plus pertinente visuellement)
+
+Niveau 2 — Pollinations (si pas d'image source disponible):
+  URL: https://image.pollinations.ai/prompt/{prompt}?width=1200&height=630&model=flux&nologo=true&enhance=true&seed={seed}
+  Prompt: f"Professional recruitment banner, {entreprise} company, {poste}, Morocco, corporate modern office, blue professional tones, no text"
+
+Niveau 3 — Image générique secteur (fallback):
+  Pré-générer 8 images génériques par secteur et les réutiliser
+
+### Cache obligatoire:
+- Toujours vérifier si static/images/{slug}-cover.jpg existe avant de générer
+- Ne jamais regénérer une image déjà présente
+
+
+## 📣 PARTAGE SOCIAL (Manque chez concurrent → Opportunité)
+
+Ajouter dans chaque article (layouts/partials/share-buttons.html):
+- WhatsApp: https://wa.me/?text={titre}%20{url}  (CRITIQUE au Maroc)
+- Facebook: https://www.facebook.com/sharer/sharer.php?u={url}
+- LinkedIn: https://www.linkedin.com/sharing/share-offsite/?url={url}
+- Telegram: https://t.me/share/url?url={url}&text={titre}  (absent chez concurrent)
+- Copier le lien: bouton clipboard JS natif
+
+Styling: Boutons colorés (WhatsApp=vert, Facebook=bleu, LinkedIn=bleu foncé, Telegram=cyan)
+
+
+## 🔍 SEO AVANCÉ (Points forts vs concurrent)
+
+### Google Jobs (concurrent ABSENT):
+Chaque article doit avoir le Schema JSON-LD complet:
+{
+  "@type": "JobPosting",
+  "title": "...",
+  "description": "...",
+  "datePosted": "YYYY-MM-DD",
+  "validThrough": "YYYY-MM-DD",
+  "employmentType": "FULL_TIME/PART_TIME/CONTRACTOR",
+  "hiringOrganization": {"@type": "Organization", "name": "..."},
+  "jobLocation": {"@type": "Place", "address": {..., "addressCountry": "MA"}},
+  "directApply": true,
+  "applyLink": "..."
+}
+
+### Google News (concurrent PRÉSENT → à reproduire absolument):
+Hugo doit générer un news-sitemap.xml avec:
+  <news:publication><news:name>Ton Site</news:name><news:language>fr</news:language></news:publication>
+  <news:publication_date>...</news:publication_date>
+  <news:title>...</news:title>
+
+### FAQ / People Also Ask (concurrent ABSENT → avantage majeur):
+3 questions minimum par article, avec Schema FAQPage:
+{
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "...", "acceptedAnswer": {"@type": "Answer", "text": "..."}}
+  ]
+}
+
+### Breadcrumb Schema (concurrent ABSENT):
+{"@type": "BreadcrumbList", "itemListElement": [...]}
+
+### Standards minimaux par article:
+- Title SEO: 55-60 caractères (contient: poste + entreprise + année)
+- Meta description: 150-160 caractères
+- H1 unique = title front matter
+- H2 minimum: 4 (accroche, entreprise, postes, comment postuler)
+- Longueur: 800-1000 mots
+- FAQ: 3 questions
+- Image cover: 1 avec alt text SEO
+- Schema: JobPosting + FAQPage + BreadcrumbList
+- Lien externe: apply_url avec rel="nofollow noopener"
+- Temps de lecture: calculé et affiché
+
+
+## ⚡ FORMAT DES TITRES (Inspiration bghit-nekhdem + SEO)
+
+Pattern obligatoire dans le prompt DeepSeek:
+"[Entreprise] Recrute [X] [Poste(s)] à [Ville] – [Année]"
+
+Exemples:
+- "Société Générale Recrute 5 Postes à Casablanca – 2026"
+- "Concours de Recrutement ANAPEC Maroc 2026 (12 Postes)"
+- "Offre d'Emploi CDI – Ingénieur DevOps chez OCP – Khouribga 2026"
+- "Stage PFE Rémunéré – Développeur Web chez Capgemini Casablanca"
+- "Emploi en France – 50 Postes Ouverts aux Candidats Marocains 2026"
+
+Format slug obligatoire:
+- "[entreprise]-recrute-[poste]-[ville]-[annee]"
+- Exemples: "societe-generale-recrute-casablanca-2026"
+             "concours-anapec-maroc-2026"
+
+
+## 🚫 NE JAMAIS FAIRE
+
+1. JAMAIS de Selenium/Playwright/requests-html
+2. JAMAIS hardcoder une clé API
+3. JAMAIS time.sleep() < 2 secondes (respecter les serveurs)
+4. JAMAIS publier un article sans apply_url valide
+5. JAMAIS créer un fichier hors de l'arborescence définie
+6. JAMAIS oublier le Schema JSON-LD JobPosting (avantage concurrentiel clé)
+7. JAMAIS article < 800 mots
+8. JAMAIS article sans section FAQ
+9. JAMAIS article sans boutons de partage social
+10. JAMAIS article sans image cover (chercher source → pollinations → générique)
+11. JAMAIS dupliquer un slug (published_slugs.txt)
+12. JAMAIS utiliser "html.parser" comme parser BS4 → toujours "lxml"
+
+
+## ✅ CHECKLIST PUBLICATION AUTOMATIQUE
+
+hugo_publisher.py vérifie OBLIGATOIREMENT avant écriture:
+[ ] title présent et 55-60 chars
+[ ] description présente et 150-160 chars
+[ ] slug unique (non présent dans published_slugs.txt)
+[ ] slug sans accents, sans espaces, lowercase
+[ ] apply_url présent et commence par "https://"
+[ ] image présente dans static/images/{slug}-cover.jpg
+[ ] Schema JSON-LD présent dans le Markdown
+[ ] Shortcode apply-button présent
+[ ] Au moins 3 questions FAQ dans le contenu
+[ ] word_count >= 800
+[ ] Taxonomies remplies (secteur, ville, type minimum)

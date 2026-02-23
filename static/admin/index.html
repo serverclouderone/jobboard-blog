@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BeJob Admin</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    :root { --bg:#ffffff; --text:#111; --muted:#666; --border:#e6e6e6; --card:#f7f7f7; --primary:#1565C0; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#121212; --text:#eee; --muted:#aaa; --border:#333; --card:#1e1e1e; } }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);}
+    .wrap{max-width:980px;margin:0 auto;padding:1.25rem;}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;}
+    .title{font-size:1.25rem;font-weight:800;}
+    .btn{appearance:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:.6rem .9rem;border-radius:12px;cursor:pointer;font-weight:600;}
+    .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1rem;}
+    a.card{display:block;text-decoration:none;color:inherit;border:1px solid var(--border);background:var(--card);border-radius:16px;padding:1rem;}
+    .card h2{margin:0 0 .25rem;font-size:1rem;}
+    .card p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.4;}
+    .notice{margin-top:1rem;color:var(--muted);font-size:.9rem;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">BeJob — Dashboard</div>
+      <div>
+        <button class="btn" id="login-btn" type="button">Se connecter</button>
+        <button class="btn" id="logout-btn" type="button" style="display:none;">Se déconnecter</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <a class="card" href="/admin/cms/">
+        <h2>CMS (édition)</h2>
+        <p>Créer et modifier les pages + articles Hugo, gérer les images.</p>
+      </a>
+      <a class="card" href="/admin/pipeline/">
+        <h2>Pipeline</h2>
+        <p>Lancer les workflows GitHub Actions, suivre l’exécution.</p>
+      </a>
+      <a class="card" href="/">
+        <h2>Voir le site</h2>
+        <p>Retour au site public.</p>
+      </a>
+    </div>
+
+    <div class="notice">
+      L’accès admin nécessite Netlify Identity (à activer dans Netlify → Identity → Enable).
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function showLoggedIn(logged){
+        document.getElementById('login-btn').style.display = logged ? 'none' : 'inline-block';
+        document.getElementById('logout-btn').style.display = logged ? 'inline-block' : 'none';
+      }
+
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', function(user){ showLoggedIn(!!user); });
+        window.netlifyIdentity.on('login', function(){ showLoggedIn(true); window.netlifyIdentity.close(); });
+        window.netlifyIdentity.on('logout', function(){ showLoggedIn(false); });
+      }
+
+      document.getElementById('login-btn').addEventListener('click', function(){
+        if (window.netlifyIdentity) window.netlifyIdentity.open('login');
+      });
+      document.getElementById('logout-btn').addEventListener('click', function(){
+        if (window.netlifyIdentity) window.netlifyIdentity.logout();
+      });
+    })();
+  </script>
+</body>
+</html>

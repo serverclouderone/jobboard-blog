@@ -1,0 +1,151 @@
+baseURL = "https://bejob.ma/"
+languageCode = "fr-MA"
+defaultContentLanguage = "fr"
+title = "BeJob — Offres d'Emploi au Maroc 2026"
+enableRobotsTXT = true
+paginate = 24
+summaryLength = 60
+
+[params]
+  description = "Trouvez les meilleures offres d'emploi au Maroc. Emploi public, privé, étranger. Mis à jour plusieurs fois par jour."
+  author = "BeJob"
+  email = "contact@bejob.ma"
+  googleAnalytics = ""
+  adsenseID = ""
+  adsenseSlot = ""
+  offresAujourdhui = 0
+  socialFacebook = ""
+  socialLinkedIn = ""
+  socialTelegram = ""
+  themeDefault = "auto"
+
+[taxonomies]
+  secteur = "secteurs"
+  fonction = "fonctions"
+  ville = "villes"
+  type = "types"
+  pays = "pays"
+
+[outputs]
+  home     = ["HTML", "RSS", "JSON", "NewsSitemap"]
+  page     = ["HTML"]
+  section  = ["HTML", "RSS"]
+  term     = ["HTML"]
+  taxonomy = ["HTML"]
+
+[outputFormats.NewsSitemap]
+  mediaType = "application/xml"
+  baseName = "news-sitemap"
+  isPlainText = true
+  notAlternative = true
+
+[outputFormats.JSON]
+  mediaType   = "application/json"
+  baseName    = "index"
+  isPlainText = true
+
+[sitemap]
+  changefreq = "hourly"
+  priority   = 0.8
+  filename   = "sitemap.xml"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+# ── MENUS ────────────────────────────────────────────────────────
+
+[[menus.main]]
+  name   = "Accueil"
+  url    = "/"
+  weight = 1
+
+[[menus.main]]
+  name   = "Emploi Maroc"
+  url    = "/offres/"
+  weight = 2
+  [menus.main.params]
+    hasDropdown = true
+
+[[menus.main]]
+  name   = "Emploi Public"
+  url    = "/public/"
+  weight = 3
+
+[[menus.main]]
+  name   = "Emploi Étranger"
+  url    = "/etranger/"
+  weight = 4
+  [menus.main.params]
+    hasDropdown = true
+
+[[menus.main]]
+  name   = "Stage & PFE"
+  url    = "/stage/"
+  weight = 5
+
+[[menus.main]]
+  name   = "Coaching"
+  url    = "/conseils/"
+  weight = 6
+
+[[menus.main]]
+  name   = "Résultats Concours"
+  url    = "/concours/"
+  weight = 7
+
+[[menus.main]]
+  name   = "📢 Publier une Offre"
+  url    = "/pages/publier-offre/"
+  weight = 8
+  [menus.main.params]
+    class = "btn-cta"
+
+# Sous-menu Emploi Maroc
+[[menus.emploi]]
+  name   = "Par Secteur"
+  url    = "/secteurs/"
+  weight = 1
+[[menus.emploi]]
+  name   = "Par Fonction"
+  url    = "/fonctions/"
+  weight = 2
+[[menus.emploi]]
+  name   = "Par Ville"
+  url    = "/villes/"
+  weight = 3
+
+# Sous-menu Emploi Étranger
+[[menus.etranger]]
+  name   = "🇫🇷 Emploi en France"
+  url    = "/etranger/france/"
+  weight = 1
+[[menus.etranger]]
+  name   = "🇨🇦 Emploi au Canada"
+  url    = "/etranger/canada/"
+  weight = 2
+
+# Footer
+[[menus.footer]]
+  name   = "À Propos"
+  url    = "/pages/a-propos/"
+  weight = 1
+[[menus.footer]]
+  name   = "Contact"
+  url    = "/pages/contact/"
+  weight = 2
+[[menus.footer]]
+  name   = "Politique de Confidentialité"
+  url    = "/pages/politique-de-confidentialite/"
+  weight = 3
+[[menus.footer]]
+  name   = "Conditions d'Utilisation"
+  url    = "/pages/conditions-utilisation/"
+  weight = 4
+[[menus.footer]]
+  name   = "Mentions Légales"
+  url    = "/pages/mentions-legales/"
+  weight = 5
+[[menus.footer]]
+  name   = "Publier une Offre"
+  url    = "/pages/publier-offre/"
+  weight = 6

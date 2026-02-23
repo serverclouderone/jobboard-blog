@@ -1,0 +1,54 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "static/images"
+public_folder: "/images"
+
+locale: "fr"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    folder: "content/pages"
+    create: false
+    format: "frontmatter"
+    extension: "md"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Brouillon", name: "draft", widget: "boolean", required: false, default: false }
+      - { label: "Description", name: "description", widget: "string", required: false }
+      - { label: "Contenu", name: "body", widget: "markdown" }
+
+  - name: "conseils"
+    label: "Conseils RH"
+    folder: "content/conseils"
+    create: true
+    format: "frontmatter"
+    extension: "md"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Description", name: "description", widget: "string", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Brouillon", name: "draft", widget: "boolean", required: false, default: false }
+      - { label: "Contenu", name: "body", widget: "markdown" }
+
+  - name: "offres"
+    label: "Offres (lecture seule)"
+    folder: "content/offres"
+    create: false
+    format: "frontmatter"
+    extension: "md"
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Entreprise", name: "company", widget: "string", required: false }
+      - { label: "Ville", name: "location", widget: "string", required: false }
+      - { label: "Type", name: "contract_type", widget: "string", required: false }
+      - { label: "URL Postuler", name: "apply_url", widget: "string", required: false }
+      - { label: "Source", name: "source_url", widget: "string", required: false }
+      - { label: "Image", name: "image", widget: "string", required: false }
+      - { label: "Contenu", name: "body", widget: "markdown" }

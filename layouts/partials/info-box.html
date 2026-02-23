@@ -1,0 +1,7 @@
+<div class="info-box">
+  <table>
+    {{ with .contract_type }}<tr><th>Type</th><td>{{ . }}</td></tr>{{ end }}
+    {{ with .location }}<tr><th>Ville</th><td>{{ . }}</td></tr>{{ end }}
+    {{ with .salary }}<tr><th>Salaire</th><td>{{ . }}</td></tr>{{ end }}
+  </table>
+</div>

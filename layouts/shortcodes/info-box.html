@@ -1,0 +1,10 @@
+{{- $type := .Get "type" -}}
+{{- $ville := .Get "ville" -}}
+{{- $salaire := .Get "salaire" -}}
+<div class="info-box">
+  <table>
+    {{ with $type }}<tr><th>Type</th><td>{{ . }}</td></tr>{{ end }}
+    {{ with $ville }}<tr><th>Ville</th><td>{{ . }}</td></tr>{{ end }}
+    {{ with $salaire }}<tr><th>Salaire</th><td>{{ . }}</td></tr>{{ end }}
+  </table>
+</div>

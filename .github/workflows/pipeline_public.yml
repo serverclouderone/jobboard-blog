@@ -1,0 +1,49 @@
+name: Pipeline Emploi Public
+
+on:
+  schedule:
+    # 7h, 15h UTC (= 8h, 16h Maroc)
+    - cron: '0 7,15 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+      POLLINATIONS_API_KEY: ${{ secrets.POLLINATIONS_API_KEY }}
+      SITE_BASE_URL: ${{ secrets.SITE_BASE_URL || 'https://bejob.ma' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run pipeline (public)
+        run: |
+          python scripts/main_pipeline.py --mode public
+      
+      - name: Commit changes
+        if: success()
+        run: |
+          git config user.name "BeJob Bot"
+          git config user.email "bot@bejob.ma"
+          git add content/public/ static/images/ scripts/utils/published_slugs.txt
+          git diff --staged --quiet || (git commit -m "Auto: nouvelles offres publiques [skip ci]" && git push)
+        continue-on-error: true

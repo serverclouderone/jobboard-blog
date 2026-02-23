@@ -1,0 +1,17 @@
+{{- $pages := where .Site.RegularPages "Section" "in" (slice "offres" "public" "etranger" "stage" "concours" "conseils") -}}
+[
+{{- range $i, $p := $pages -}}
+  {{- if $i }},{{ end -}}
+  {
+    "title": {{ $p.Title | jsonify }},
+    "url": {{ $p.RelPermalink | jsonify }},
+    "section": {{ $p.Section | jsonify }},
+    "company": {{ (default "" $p.Params.company) | jsonify }},
+    "location": {{ (default "" $p.Params.location) | jsonify }},
+    "contract_type": {{ (default "" $p.Params.contract_type) | jsonify }},
+    "date": {{ ($p.Date.Format "2006-01-02") | jsonify }},
+    "description": {{ (default "" $p.Description) | jsonify }},
+    "keywords": {{ (default (slice) $p.Params.keywords) | jsonify }}
+  }
+{{- end -}}
+]

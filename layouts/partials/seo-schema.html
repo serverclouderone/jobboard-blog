@@ -1,0 +1,44 @@
+{{/* Schema JSON-LD : JobPosting + FAQPage + BreadcrumbList (offres) | Article (conseils) | WebSite (home) */}}
+{{ if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ .Site.Title }}",
+  "url": "{{ .Site.BaseURL }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": { "@type": "EntryPoint", "urlTemplate": "{{ .Site.BaseURL }}search/?q={search_term_string}" },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{{ else if .IsPage }}
+  {{ $schemas := slice }}
+  {{ $path := trim .RelPermalink "/" }}
+  {{ $parts := split $path "/" }}
+  {{ $cumul := "" }}
+  {{ $items := slice }}
+  {{ $items = $items | append (dict "@type" "ListItem" "position" 1 "name" "Accueil" "item" .Site.BaseURL) }}
+  {{ range $i, $p := $parts }}
+    {{ if $p }}{{ $cumul = printf "%s/%s" $cumul $p }}{{ $url := printf "%s%s/" $.Site.BaseURL (trim $cumul " /") }}{{ $name := replace $p "-" " " | title }}{{ $items = $items | append (dict "@type" "ListItem" "position" (add $i 2) "name" $name "item" $url) }}{{ end }}
+  {{ end }}
+  {{ $bl := dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $items }}
+  {{ $schemas = $schemas | append $bl }}
+
+  {{ if eq .Params.schema_type "JobPosting" }}
+  {{ $jp := dict "@context" "https://schema.org" "@type" "JobPosting" "title" .Title "description" .Description "datePosted" (.Date.Format "2006-01-02") "validThrough" (dateFormat "2006-01-02" (.Date.AddDate 0 1 0)) "employmentType" (upper (default "FULL_TIME" .Params.contract_type)) "hiringOrganization" (dict "@type" "Organization" "name" (default "" .Params.company)) "jobLocation" (dict "@type" "Place" "address" (dict "@type" "PostalAddress" "addressLocality" (default "" .Params.location) "addressRegion" (default "" .Params.region) "addressCountry" "MA")) "directApply" true "url" (default "" .Params.apply_url) }}
+  {{ $schemas = $schemas | append $jp }}
+  {{ end }}
+
+  {{ with .Params.faq_questions }}
+  {{ $faqList := slice }}{{ range . }}{{ $faqList = $faqList | append (dict "@type" "Question" "name" .question "acceptedAnswer" (dict "@type" "Answer" "text" .answer)) }}{{ end }}
+  {{ $schemas = $schemas | append (dict "@context" "https://schema.org" "@type" "FAQPage" "mainEntity" $faqList) }}
+  {{ end }}
+
+  {{ if eq .Section "conseils" }}
+  {{ $schemas = $schemas | append (dict "@context" "https://schema.org" "@type" "Article" "headline" .Title "description" .Description "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00") "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00") "author" (dict "@type" "Organization" "name" .Site.Params.author)) }}
+  {{ end }}
+
+  {{ range $schemas }}<script type="application/ld+json">{{ . | jsonify }}</script>{{ end }}
+{{ end }}

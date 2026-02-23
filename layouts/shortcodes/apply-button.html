@@ -1,0 +1,9 @@
+{{- $url := .Get "url" -}}
+{{- $text := .Get "text" | default "Postuler maintenant →" -}}
+<div class="apply-cta-block">
+  <div class="apply-cta-inner">
+    <p class="apply-cta-label">🚀 Intéressé(e) par cette opportunité ?</p>
+    <a href="{{ $url }}" target="_blank" rel="nofollow noopener noreferrer" class="btn-apply-main" data-apply-url="{{ $url }}">{{ $text }}</a>
+    <p class="apply-cta-note">⚡ Candidature directe • Lien officiel de l'employeur</p>
+  </div>
+</div>

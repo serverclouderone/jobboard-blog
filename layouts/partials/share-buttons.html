@@ -1,0 +1,8 @@
+<div class="share-buttons">
+  <span class="share-label">Partager :</span>
+  <a href="https://wa.me/?text={{ .Title | urlize }}%20{{ .Permalink }}" target="_blank" rel="noopener" class="share-btn share-whatsapp" aria-label="Partager sur WhatsApp">📱 WhatsApp</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" target="_blank" rel="noopener" class="share-btn share-facebook" aria-label="Partager sur Facebook">Facebook</a>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ .Permalink }}" target="_blank" rel="noopener" class="share-btn share-linkedin" aria-label="Partager sur LinkedIn">LinkedIn</a>
+  <a href="https://t.me/share/url?url={{ .Permalink }}&text={{ .Title | urlize }}" target="_blank" rel="noopener" class="share-btn share-telegram" aria-label="Partager sur Telegram">Telegram</a>
+  <button type="button" class="share-btn share-copy" data-copy-url="{{ .Permalink }}" aria-label="Copier le lien">🔗 Copier</button>
+</div>

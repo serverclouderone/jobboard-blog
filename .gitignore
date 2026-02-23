@@ -1,0 +1,34 @@
+# Env
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+env/
+
+# Logs (garder les logs récents pour debugging GitHub Actions)
+logs/*.log
+!logs/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Hugo
+public/
+resources/_gen/
+
+# Optional: keep published_slugs under version control
+# scripts/utils/published_slugs.txt

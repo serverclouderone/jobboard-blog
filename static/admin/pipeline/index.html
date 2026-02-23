@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BeJob — Pipeline</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    :root { --bg:#ffffff; --text:#111; --muted:#666; --border:#e6e6e6; --card:#f7f7f7; --primary:#1565C0; --danger:#c62828; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#121212; --text:#eee; --muted:#aaa; --border:#333; --card:#1e1e1e; } }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);}
+    .wrap{max-width:980px;margin:0 auto;padding:1.25rem;}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;}
+    .title{font-size:1.1rem;font-weight:800;}
+    .btn{appearance:none;border:1px solid var(--border);background:var(--card);color:var(--text);padding:.6rem .9rem;border-radius:12px;cursor:pointer;font-weight:700;}
+    .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff;}
+    .btn.danger{background:var(--danger);border-color:var(--danger);color:#fff;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1rem;}
+    .card{border:1px solid var(--border);background:var(--card);border-radius:16px;padding:1rem;}
+    .card h2{margin:0 0 .25rem;font-size:1rem;}
+    .card p{margin:0 0 .75rem;color:var(--muted);font-size:.9rem;line-height:1.4;}
+    .row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+    input[type=text]{flex:1;min-width:180px;padding:.6rem .7rem;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--text);}
+    .status{margin-top:1rem;border:1px solid var(--border);border-radius:16px;padding:1rem;white-space:pre-wrap;color:var(--muted);}
+    a{color:inherit;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="title">Pipeline — Déclenchement GitHub Actions</div>
+        <div style="color:var(--muted);font-size:.9rem;">Cette page déclenche des workflows (workflow_dispatch) depuis Netlify.</div>
+      </div>
+      <div class="row">
+        <a class="btn" href="/admin/">← Dashboard</a>
+        <button class="btn" id="login-btn" type="button">Se connecter</button>
+        <button class="btn" id="logout-btn" type="button" style="display:none;">Se déconnecter</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Offres privées</h2>
+        <p>Mode: <strong>prive</strong>. Option: mots-clés.</p>
+        <div class="row">
+          <input id="keywords" type="text" placeholder="keywords (optionnel) ex: developpeur data" />
+          <button class="btn primary" data-workflow="pipeline_offres.yml">Lancer</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Emploi public</h2>
+        <p>Mode: <strong>public</strong>.</p>
+        <div class="row">
+          <button class="btn primary" data-workflow="pipeline_public.yml">Lancer</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Emploi étranger</h2>
+        <p>Mode: <strong>etranger</strong>.</p>
+        <div class="row">
+          <button class="btn primary" data-workflow="pipeline_etranger.yml">Lancer</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Editorial (Conseils RH)</h2>
+        <p>Mode: <strong>editorial</strong>.</p>
+        <div class="row">
+          <button class="btn primary" data-workflow="pipeline_editorial.yml">Lancer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="status" id="status">Connecte-toi pour déclencher un workflow.</div>
+  </div>
+
+  <script>
+    (function(){
+      var status = document.getElementById('status');
+      function setStatus(msg){ status.textContent = msg; }
+
+      function showLoggedIn(logged){
+        document.getElementById('login-btn').style.display = logged ? 'none' : 'inline-block';
+        document.getElementById('logout-btn').style.display = logged ? 'inline-block' : 'none';
+      }
+
+      function requireUser(){
+        if (!window.netlifyIdentity) return null;
+        return window.netlifyIdentity.currentUser();
+      }
+
+      async function callDispatch(workflow){
+        var user = requireUser();
+        if (!user) { setStatus('Netlify Identity non disponible.'); return; }
+        var jwt = await user.jwt();
+        var keywords = (document.getElementById('keywords') && document.getElementById('keywords').value || '').trim();
+        setStatus('Déclenchement en cours...');
+        var payload = { workflow: workflow, ref: 'main' };
+        if (workflow === 'pipeline_offres.yml' && keywords) payload.inputs = { keywords: keywords };
+
+        var res = await fetch('/.netlify/functions/dispatch-workflow', {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + jwt },
+          body: JSON.stringify(payload)
+        });
+        var txt = await res.text();
+        if (!res.ok) {
+          setStatus('Erreur (' + res.status + '): ' + txt);
+          return;
+        }
+        setStatus('OK: ' + txt + '\n\nAstuce: Va dans GitHub → Actions pour voir l’exécution en temps réel.');
+      }
+
+      document.querySelectorAll('button[data-workflow]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var user = requireUser();
+          if (!user) { setStatus('Active Netlify Identity puis connecte-toi.'); return; }
+          callDispatch(btn.getAttribute('data-workflow'));
+        });
+      });
+
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', function(user){ showLoggedIn(!!user); });
+        window.netlifyIdentity.on('login', function(){ showLoggedIn(true); window.netlifyIdentity.close(); setStatus('Connecté. Tu peux lancer un workflow.'); });
+        window.netlifyIdentity.on('logout', function(){ showLoggedIn(false); setStatus('Déconnecté.'); });
+      }
+
+      document.getElementById('login-btn').addEventListener('click', function(){
+        if (window.netlifyIdentity) window.netlifyIdentity.open('login');
+      });
+      document.getElementById('logout-btn').addEventListener('click', function(){
+        if (window.netlifyIdentity) window.netlifyIdentity.logout();
+      });
+
+    })();
+  </script>
+</body>
+</html>

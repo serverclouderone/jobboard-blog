@@ -1,0 +1,33 @@
+{{ define "main" }}
+<section class="list-section">
+  <h1 class="section-title">{{ .Title }}</h1>
+  <p class="section-desc">{{ .Description | default .Content }}</p>
+  <p class="section-count">{{ len .Pages }} offres</p>
+
+  <div class="filters">
+    <button type="button" class="filter-pill active" data-filter="all">Tous</button>
+    <button type="button" class="filter-pill" data-filter="cdi">CDI</button>
+    <button type="button" class="filter-pill" data-filter="cdd">CDD</button>
+    <button type="button" class="filter-pill" data-filter="stage">Stage</button>
+    <button type="button" class="filter-pill" data-filter="remote">Remote</button>
+    <select class="filter-select" aria-label="Ville"><option value="">Toutes les villes</option></select>
+    <select class="filter-sort" aria-label="Tri"><option value="recent">Plus récent</option><option value="oldest">Plus ancien</option></select>
+  </div>
+
+  <div class="card-grid" id="list-cards">
+    {{ range .Paginator.Pages }}
+    <a href="{{ .Permalink }}" class="card" data-type="{{ (index .Params.types 0) | default "cdi" }}" data-ville="{{ .Params.location }}" data-date="{{ .Date.Format "2006-01-02" }}">
+      {{ with .Params.image }}<img src="{{ if hasPrefix . "/" }}{{ . }}{{ else }}/{{ . }}{{ end }}" alt="" loading="lazy" class="card-img">{{ end }}
+      <span class="card-badge type-{{ (index .Params.types 0) | default "cdi" }}">{{ .Params.contract_type | default "Offre" }}</span>
+      {{ if .Date.After (now.AddDate 0 0 -1) }}<span class="badge-new">NOUVEAU</span>{{ end }}
+      <h2 class="card-title">{{ .Title }}</h2>
+      <span class="card-meta">🏢 {{ .Params.company }} · 📍 {{ .Params.location }}</span>
+      <span class="card-date">il y a {{ div (sub now.Unix .Date.Unix) 86400 }} jours</span>
+      <span class="btn-card">Voir l'offre →</span>
+    </a>
+    {{ end }}
+  </div>
+
+  {{ template "_internal/pagination.html" . }}
+</section>
+{{ end }}

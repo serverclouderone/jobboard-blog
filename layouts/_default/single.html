@@ -1,0 +1,67 @@
+{{ define "main" }}
+<article class="single-offre">
+  <nav class="breadcrumb" aria-label="Fil d'Ariane">
+    <a href="{{ "/" | relURL }}">Accueil</a>
+    <span aria-hidden="true">›</span>
+    <a href="{{ .Section | relURL }}">{{ .Section | title }}</a>
+    <span aria-hidden="true">›</span>
+    <span>{{ .Title }}</span>
+  </nav>
+
+  {{ if .Params.urgent }}<span class="badge badge-urgent">URGENT</span>{{ end }}
+
+  {{ with .Params.image }}
+  <div class="cover-wrap">
+    <img src="{{ if hasPrefix . "/" }}{{ . }}{{ else }}/{{ . }}{{ end }}" alt="{{ $.Title }}" class="cover-img" loading="lazy" width="1200" height="400">
+  </div>
+  {{ end }}
+
+  <div class="meta-badges">
+    {{ with .Params.company }}<span class="meta-b">🏢 {{ . }}</span>{{ end }}
+    {{ with .Params.location }}<span class="meta-b">📍 {{ . }}</span>{{ end }}
+    {{ with .Params.contract_type }}<span class="meta-b">💼 {{ . }}</span>{{ end }}
+    <span class="meta-b">📅 {{ .Date.Format "2 Jan 2006" }}</span>
+    {{ with .Params.reading_time }}<span class="meta-b reading-time">⏱️ {{ . }}</span>{{ end }}
+  </div>
+
+  <h1 class="single-title">{{ .Title }}</h1>
+
+  {{ partial "adsense.html" . }}
+
+  {{ with .Params }}<div class="info-box">{{ partial "info-box.html" . }}</div>{{ end }}
+
+  <div class="article-content content">
+    {{ .Content }}
+  </div>
+
+  {{ partial "share-buttons.html" . }}
+
+  <div class="apply-cta-block apply-cta-final">
+    <div class="apply-cta-inner">
+      <p class="apply-cta-label">Postuler</p>
+      <a href="{{ .Params.apply_url }}" target="_blank" rel="nofollow noopener noreferrer" class="btn-apply-main">{{ .Title }}</a>
+      <p class="apply-cta-note"><a href="{{ .Params.apply_url }}" target="_blank" rel="nofollow noopener">Voir l'offre originale →</a></p>
+    </div>
+  </div>
+
+  {{ partial "newsletter-inline.html" . }}
+  {{ partial "adsense.html" . }}
+
+  {{ $related := where (where .Site.RegularPages "Section" .Section) "Permalink" "!=" .Permalink | first 3 }}
+  {{ if $related }}
+  <section class="related">
+    <h2>Offres similaires</h2>
+    <div class="card-grid">
+      {{ range $related }}
+      <a href="{{ .Permalink }}" class="card">
+        {{ with .Params.image }}<img src="{{ if hasPrefix . "/" }}{{ . }}{{ else }}/{{ . }}{{ end }}" alt="" loading="lazy" class="card-img">{{ end }}
+        <span class="card-badge">{{ .Params.contract_type | default "Offre" }}</span>
+        <h3 class="card-title">{{ .Title }}</h3>
+        <span class="card-meta">🏢 {{ .Params.company }} · 📍 {{ .Params.location }}</span>
+      </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</article>
+{{ end }}

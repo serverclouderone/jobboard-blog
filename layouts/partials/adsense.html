@@ -1,0 +1,6 @@
+{{ if .Site.Params.adsenseID }}
+<div class="ad-container" data-ad-slot="{{ .Site.Params.adsenseSlot }}">
+  <p class="ad-label">Publicité</p>
+  <ins class="adsbygoogle" style="display:block" data-ad-client="{{ .Site.Params.adsenseID }}" data-ad-slot="{{ .Site.Params.adsenseSlot }}" data-ad-format="auto"></ins>
+</div>
+{{ end }}

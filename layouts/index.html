@@ -1,0 +1,22 @@
+{{ define "main" }}
+<section class="list-section">
+  <h1 class="section-title">{{ .Site.Title }}</h1>
+  <p class="section-desc">{{ .Site.Params.description }}</p>
+  <p class="section-count">{{ .Site.Params.offresAujourdhui | default 0 }} offres aujourd'hui</p>
+
+  <div class="card-grid">
+    {{ range first 12 (where .Site.RegularPages "Section" "in" (slice "offres" "public" "etranger" "stage")) }}
+    <a href="{{ .Permalink }}" class="card" data-type="{{ (index .Params.types 0) | default "cdi" }}" data-date="{{ .Date.Format "2006-01-02" }}">
+      {{ with .Params.image }}<img src="{{ if hasPrefix . "/" }}{{ . }}{{ else }}/{{ . }}{{ end }}" alt="" loading="lazy" class="card-img">{{ end }}
+      <span class="card-badge type-{{ (index .Params.types 0) | default "cdi" }}">{{ .Params.contract_type | default "Offre" }}</span>
+      {{ if .Date.After (now.AddDate 0 0 -1) }}<span class="badge-new">NOUVEAU</span>{{ end }}
+      <h2 class="card-title">{{ .Title }}</h2>
+      <span class="card-meta">🏢 {{ .Params.company }} · 📍 {{ .Params.location }}</span>
+      <span class="btn-card">Voir l'offre →</span>
+    </a>
+    {{ end }}
+  </div>
+
+  <p><a href="{{ "offres/" | relURL }}" class="btn-apply-main">Voir toutes les offres</a></p>
+</section>
+{{ end }}

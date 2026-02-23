@@ -1,0 +1,44 @@
+<header class="site-header" id="site-header">
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <span class="offres-count">{{ .Site.Params.offresAujourdhui | default 0 }} offres aujourd'hui</span>
+      <nav class="top-links" aria-label="Réseaux sociaux">
+        {{ with .Site.Params.socialFacebook }}{{ if . }}<a href="{{ . }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">Facebook</a>{{ end }}{{ end }}
+        {{ with .Site.Params.socialLinkedIn }}{{ if . }}<a href="{{ . }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">LinkedIn</a>{{ end }}{{ end }}
+        {{ with .Site.Params.socialTelegram }}{{ if . }}<a href="{{ . }}" target="_blank" rel="noopener noreferrer" aria-label="Telegram">Telegram</a>{{ end }}{{ end }}
+      </nav>
+    </div>
+  </div>
+  <div class="header-main">
+    <div class="container header-inner">
+      <a href="{{ "/" | relURL }}" class="logo">{{ .Site.Title }}</a>
+      <form class="search-form" action="{{ "search/" | relURL }}" method="get" role="search">
+        <input type="search" name="q" placeholder="Rechercher une offre..." aria-label="Recherche">
+        <button type="submit" aria-label="Rechercher">🔍</button>
+      </form>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Changer le thème" aria-pressed="false" title="Thème clair/sombre">
+        <span class="theme-toggle-icon" aria-hidden="true">🌓</span>
+      </button>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-main" id="nav-main" aria-label="Navigation principale">
+        <ul class="nav-list">
+          {{ range .Site.Menus.main }}
+          <li class="nav-item {{ if .Params.hasDropdown }}has-dropdown{{ end }}" {{ if .Params.hasDropdown }}data-has-dropdown="true"{{ end }}>
+            <a href="{{ .URL }}" class="{{ with .Params.class }}{{ . }}{{ end }}" {{ if .Params.hasDropdown }}aria-haspopup="true" aria-expanded="false"{{ end }}>{{ .Name }}</a>
+            {{ if .Params.hasDropdown }}
+            {{ $menuName := "" }}{{ if eq .Name "Emploi Maroc" }}{{ $menuName = "emploi" }}{{ else if eq .Name "Emploi Étranger" }}{{ $menuName = "etranger" }}{{ end }}
+            {{ with (index $.Site.Menus $menuName) }}
+            <ul class="dropdown">
+              {{ range . }}<li><a href="{{ .URL }}">{{ .Name }}</a></li>{{ end }}
+            </ul>
+            {{ end }}
+            {{ end }}
+          </li>
+          {{ end }}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

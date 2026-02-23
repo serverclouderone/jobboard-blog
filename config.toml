@@ -6,6 +6,10 @@ enableRobotsTXT = true
 paginate = 24
 summaryLength = 60
 
+[author]
+  name = "BeJob"
+  email = "contact@bejob.ma"
+
 [params]
   description = "Trouvez les meilleures offres d'emploi au Maroc. Emploi public, privé, étranger. Mis à jour plusieurs fois par jour."
   author = "BeJob"

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  {{- $now := now -}}
+  {{- $pages := where .Site.RegularPages "Section" "in" (slice "offres" "public" "etranger" "stage" "concours" "conseils") -}}
+  {{- range $p := $pages -}}
+    {{- if (ge $p.Date (add $now (duration "-48h"))) -}}
+  <url>
+    <loc>{{ $p.Permalink }}</loc>
+    <news:news>
+      <news:publication>
+        <news:name>{{ $.Site.Title }}</news:name>
+        <news:language>{{ $.Site.Language.Lang }}</news:language>
+      </news:publication>
+      <news:publication_date>{{ $p.Date.Format "2006-01-02T15:04:05Z07:00" }}</news:publication_date>
+      <news:title>{{ $p.Title | htmlEscape }}</news:title>
+    </news:news>
+  </url>
+    {{- end -}}
+  {{- end -}}
+</urlset>

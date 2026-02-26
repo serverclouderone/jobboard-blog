@@ -126,7 +126,7 @@
         var payload = { workflow: workflow, ref: 'main' };
         if (workflow === 'pipeline_offres.yml' && keywords) payload.inputs = { keywords: keywords };
 
-        var res = await fetch('https://bejob-api.YOUR-SUBDOMAIN.workers.dev/dispatch-workflow', {
+        var res = await fetch('https://bejob-api.serverclouderone.workers.dev/dispatch-workflow', {
           method: 'POST',
           headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + adminKey },
           body: JSON.stringify(payload)

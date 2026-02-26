@@ -13,7 +13,7 @@ Vous avez une question, une suggestion, ou souhaitez publier une offre d'emploi 
 
 Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.
 
-<form name="contact" method="POST" action="https://bejob-api.YOUR-SUBDOMAIN.workers.dev/forms/contact">
+<form name="contact" method="POST" action="https://bejob-api.serverclouderone.workers.dev/forms/contact" class="form">
   <p style="display:none">
     <label>Ne remplissez pas ce champ si vous êtes humain : <input name="bot-field" /></label>
   </p>

@@ -6,7 +6,7 @@ compatibility_date = "2025-02-01"
 # GitHub OAuth (Decap CMS)
 # GITHUB_OAUTH_CLIENT_ID = "..."
 # GITHUB_OAUTH_CLIENT_SECRET = "..."
-# GITHUB_OAUTH_REDIRECT_URI = "https://bejob-api.YOUR-SUBDOMAIN.workers.dev/callback"
+# GITHUB_OAUTH_REDIRECT_URI = "https://bejob-api.serverclouderone.workers.dev/callback"
 
 # GitHub Actions dispatch
 # ADMIN_API_KEY = "..."

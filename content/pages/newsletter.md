@@ -27,7 +27,7 @@ Abonnez-vous à notre newsletter et recevez chaque jour les meilleures offres d'
 
 Remplissez le formulaire ci-dessous pour vous abonner à notre newsletter :
 
-<form name="newsletter" method="POST" action="https://bejob-api.YOUR-SUBDOMAIN.workers.dev/forms/newsletter">
+<form name="newsletter" method="POST" action="https://bejob-api.serverclouderone.workers.dev/forms/newsletter" class="newsletter-form">
   <p style="display:none">
     <label>Ne remplissez pas ce champ : <input name="bot-field" /></label>
   </p>

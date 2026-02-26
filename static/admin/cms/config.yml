@@ -2,7 +2,7 @@ backend:
   name: github
   repo: "serverclouderone/jobboard-blog"
   branch: main
-  base_url: "https://bejob-api.YOUR-SUBDOMAIN.workers.dev"
+  base_url: "https://bejob-api.serverclouderone.workers.dev"
   auth_endpoint: "auth"
 
 media_folder: "static/images"

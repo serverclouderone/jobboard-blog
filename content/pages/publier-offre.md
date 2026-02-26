@@ -92,7 +92,7 @@ Vous recevez :
 
 ## Formulaire de Publication
 
-<form name="publier-offre" method="POST" action="https://bejob-api.YOUR-SUBDOMAIN.workers.dev/forms/publier-offre">
+<form name="publier-offre" method="POST" action="https://bejob-api.serverclouderone.workers.dev/forms/publier-offre" class="pricing-form">
   <p style="display:none">
     <label>Ne remplissez pas ce champ : <input name="bot-field" /></label>
   </p>

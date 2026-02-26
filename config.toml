@@ -12,8 +12,9 @@ summaryLength = 60
 
 [params]
   description = "Trouvez les meilleures offres d'emploi au Maroc. Emploi public, privé, étranger. Mis à jour plusieurs fois par jour."
-  author = "BeJob"
-  email = "contact@bejob.ma"
+  [params.author]
+    name = "BeJob"
+    email = "contact@bejob.ma"
   googleAnalytics = ""
   adsenseID = ""
   adsenseSlot = ""

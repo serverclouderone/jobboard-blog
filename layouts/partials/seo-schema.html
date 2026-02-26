@@ -37,7 +37,15 @@
   {{ end }}
 
   {{ if eq .Section "conseils" }}
-  {{ $schemas = $schemas | append (dict "@context" "https://schema.org" "@type" "Article" "headline" .Title "description" .Description "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00") "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00") "author" (dict "@type" "Organization" "name" .Site.Params.author)) }}
+  {{ $authorName := "" }}
+  {{ with .Site.Params.author }}
+    {{ if reflect.IsMap . }}
+      {{ $authorName = (index . "name") }}
+    {{ else }}
+      {{ $authorName = . }}
+    {{ end }}
+  {{ end }}
+  {{ $schemas = $schemas | append (dict "@context" "https://schema.org" "@type" "Article" "headline" .Title "description" .Description "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00") "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00") "author" (dict "@type" "Organization" "name" $authorName)) }}
   {{ end }}
 
   {{ range $schemas }}<script type="application/ld+json">{{ . | jsonify }}</script>{{ end }}

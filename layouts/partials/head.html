@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
 <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
-<meta name="author" content="{{ .Site.Params.author }}">
+<meta name="author" content="{{ with .Site.Params.author }}{{ if reflect.IsMap . }}{{ index . "name" }}{{ else }}{{ . }}{{ end }}{{ end }}">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="{{ .Permalink }}">
 <meta name="language" content="fr-MA">

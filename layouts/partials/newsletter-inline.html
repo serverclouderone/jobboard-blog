@@ -1,7 +1,8 @@
 <div class="newsletter-inline">
   <p><strong>📬 Restez informé</strong></p>
   <p>Recevez les dernières offres par email.</p>
-  <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot">
+  <form name="newsletter" method="POST" action="https://bejob-api.YOUR-SUBDOMAIN.workers.dev/forms/newsletter">
+    <input type="text" name="bot" style="display:none" tabindex="-1" autocomplete="off" />
     <input type="email" name="email" placeholder="Votre email" required aria-label="Email">
     <button type="submit">S'inscrire</button>
   </form>

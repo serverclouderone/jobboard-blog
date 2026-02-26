@@ -92,8 +92,7 @@ Vous recevez :
 
 ## Formulaire de Publication
 
-<form name="publier-offre" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-  <input type="hidden" name="form-name" value="publier-offre">
+<form name="publier-offre" method="POST" action="https://bejob-api.YOUR-SUBDOMAIN.workers.dev/forms/publier-offre">
   <p style="display:none">
     <label>Ne remplissez pas ce champ : <input name="bot-field" /></label>
   </p>

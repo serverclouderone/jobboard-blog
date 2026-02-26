@@ -13,8 +13,7 @@ Vous avez une question, une suggestion, ou souhaitez publier une offre d'emploi 
 
 Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.
 
-<form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-  <input type="hidden" name="form-name" value="contact">
+<form name="contact" method="POST" action="https://bejob-api.YOUR-SUBDOMAIN.workers.dev/forms/contact">
   <p style="display:none">
     <label>Ne remplissez pas ce champ si vous êtes humain : <input name="bot-field" /></label>
   </p>

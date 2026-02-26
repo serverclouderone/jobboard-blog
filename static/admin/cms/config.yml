@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: "serverclouderone/jobboard-blog"
   branch: main
+  base_url: "https://bejob-api.YOUR-SUBDOMAIN.workers.dev"
+  auth_endpoint: "auth"
 
 media_folder: "static/images"
 public_folder: "/images"

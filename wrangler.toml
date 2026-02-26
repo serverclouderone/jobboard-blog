@@ -1,0 +1,21 @@
+name = "bejob-api"
+main = "src/index.js"
+compatibility_date = "2025-02-01"
+
+[vars]
+# GitHub OAuth (Decap CMS)
+# GITHUB_OAUTH_CLIENT_ID = "..."
+# GITHUB_OAUTH_CLIENT_SECRET = "..."
+# GITHUB_OAUTH_REDIRECT_URI = "https://bejob-api.YOUR-SUBDOMAIN.workers.dev/callback"
+
+# GitHub Actions dispatch
+# ADMIN_API_KEY = "..."
+# GITHUB_OWNER = "serverclouderone"
+# GITHUB_REPO = "jobboard-blog"
+# GITHUB_TOKEN = "..."
+# ALLOWED_WORKFLOWS = "pipeline_offres.yml,pipeline_public.yml,pipeline_etranger.yml,pipeline_editorial.yml"
+
+# Resend
+# RESEND_API_KEY = "..."
+# RESEND_FROM = "BeJob <onboarding@resend.dev>"
+# RESEND_TO = "contact@bejob.ma"

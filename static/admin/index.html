@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BeJob Admin</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     :root { --bg:#ffffff; --text:#111; --muted:#666; --border:#e6e6e6; --card:#f7f7f7; --primary:#1565C0; }
     @media (prefers-color-scheme: dark) { :root { --bg:#121212; --text:#eee; --muted:#aaa; --border:#333; --card:#1e1e1e; } }
@@ -25,10 +24,6 @@
   <div class="wrap">
     <div class="top">
       <div class="title">BeJob — Dashboard</div>
-      <div>
-        <button class="btn" id="login-btn" type="button">Se connecter</button>
-        <button class="btn" id="logout-btn" type="button" style="display:none;">Se déconnecter</button>
-      </div>
     </div>
 
     <div class="grid">
@@ -47,30 +42,8 @@
     </div>
 
     <div class="notice">
-      L’accès admin nécessite Netlify Identity (à activer dans Netlify → Identity → Enable).
+      Accès admin: le CMS utilise une connexion GitHub, et la page Pipeline utilise une clé admin.
     </div>
   </div>
-
-  <script>
-    (function(){
-      function showLoggedIn(logged){
-        document.getElementById('login-btn').style.display = logged ? 'none' : 'inline-block';
-        document.getElementById('logout-btn').style.display = logged ? 'inline-block' : 'none';
-      }
-
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', function(user){ showLoggedIn(!!user); });
-        window.netlifyIdentity.on('login', function(){ showLoggedIn(true); window.netlifyIdentity.close(); });
-        window.netlifyIdentity.on('logout', function(){ showLoggedIn(false); });
-      }
-
-      document.getElementById('login-btn').addEventListener('click', function(){
-        if (window.netlifyIdentity) window.netlifyIdentity.open('login');
-      });
-      document.getElementById('logout-btn').addEventListener('click', function(){
-        if (window.netlifyIdentity) window.netlifyIdentity.logout();
-      });
-    })();
-  </script>
 </body>
 </html>
